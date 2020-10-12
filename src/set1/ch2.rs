@@ -1,10 +1,11 @@
-use crate::set1::bytes_from_hex_str;
+use crate::ToBytes;
 use anyhow::Result;
 
 fn ch2_fixed_xor(s1: &str, s2: &str) -> Result<String> {
-    let xored = bytes_from_hex_str(s1)?
+    let xored = s1
+        .to_bytes()?
         .iter()
-        .zip(bytes_from_hex_str(s2)?.iter())
+        .zip(s2.to_bytes()?.iter())
         .map(|(&b1, &b2)| format!("{:x}", b1 ^ b2))
         .collect::<String>();
 

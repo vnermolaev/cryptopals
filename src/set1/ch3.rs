@@ -7,12 +7,23 @@ pub fn compute_probs(phrase: &[u8]) -> HashMap<u8, f32> {
             return freq;
         }
 
-        let c = if c.is_ascii_alphabetic() {
+        // let c = if c.is_ascii_alphanumeric() {
+        //     c.to_ascii_lowercase()
+        // } else if *c == b'\n' || *c == b'\t' || c.is_ascii_whitespace() || c.is_ascii_punctuation()
+        // {
+        //     b' '
+        // } else {
+        //     0
+        // };
+
+        let c = if c.is_ascii_alphanumeric() {
             c.to_ascii_lowercase()
-        } else if c.is_ascii_control() {
-            0
+        } else if *c == b'\n' || *c == b'\t' || c.is_ascii_whitespace() {
+            b' '
+        } else if c.is_ascii_punctuation() {
+            b'.'
         } else {
-            *c
+            0
         };
 
         *freq.entry(c).or_insert(0u32) += 1;
@@ -38,10 +49,17 @@ pub fn kullback_leibler(sample_dist: &HashMap<u8, f32>, test: &[u8]) -> u32 {
 
     (sample_dist.keys().fold(0f32, |kl, c| {
         let q = sample_dist.get(c).expect("Must have own key");
-        let p = test_dist.get(c).unwrap_or(&f32::EPSILON);
+        // let p = test_dist.get(c).unwrap_or(&f32::EPSILON);
+        // kl + (p * (p / q).ln())
 
-        kl + (p * (p / q).ln())
-    }) * 1000f32) as u32
+        let p = test_dist.get(c);
+
+        if let Some(p) = p {
+            kl + (p * (p / q).ln())
+        } else {
+            kl
+        }
+    }) * 100_000_f32) as u32
 }
 
 pub fn break_single_xor(sample: &HashMap<u8, f32>, test: &[u8]) -> u8 {
@@ -51,7 +69,7 @@ pub fn break_single_xor(sample: &HashMap<u8, f32>, test: &[u8]) -> u8 {
 }
 
 pub const SAMPLE: &'static str =
-    "the quick brown fox jumps over the lazy dog.
+    "the quick brown fox jumps over the lazy dog. 1234567890.
     In mathematical statistics, the Kullback–Leibler divergence (also called relative entropy) is a measure
 of how one probability distribution is different from a second, reference probability distribution.
 Applications include characterizing the relative (Shannon) entropy in information systems, randomness in
@@ -67,14 +85,14 @@ The divergence is discussed in Kullback's 1959 book, Information Theory and Stat
 
 #[cfg(test)]
 mod test {
-    use crate::set1::bytes_from_hex_str;
     use crate::set1::ch3::{break_single_xor, compute_probs, SAMPLE};
-    use crate::XOR;
+    use crate::{ToBytes, XOR};
 
     #[test]
     fn test_single_byte_xor_cipher() {
-        let s = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736".to_string();
-        let bytes = bytes_from_hex_str(&s).expect("must convert");
+        let bytes = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+            .to_bytes()
+            .expect("must convert");
 
         let sample_dist = compute_probs((&SAMPLE).as_ref());
         let key = break_single_xor(&sample_dist, &bytes);

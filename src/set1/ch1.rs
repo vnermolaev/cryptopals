@@ -1,8 +1,8 @@
-use crate::set1::bytes_from_hex_str;
+use crate::ToBytes;
 use anyhow::Result;
 
 fn ch1_convert_hex_to_base64(hex: &str) -> Result<String> {
-    Ok(base64::encode(&bytes_from_hex_str(hex)?))
+    Ok(base64::encode(&hex.to_bytes()?))
 }
 
 #[cfg(test)]

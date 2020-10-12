@@ -1,5 +1,5 @@
-use crate::set1::bytes_from_hex_str;
 use crate::set1::ch3::{compute_probs, kullback_leibler, SAMPLE};
+use crate::ToBytes;
 use crate::XOR;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -13,8 +13,8 @@ fn detect_single_character_xor(path: &str) -> (usize, u8, Vec<u8>) {
         .lines()
         .into_iter()
         .map(|line| {
-            let line = line.expect("Line must have been read");
-            bytes_from_hex_str(&line).expect("must convert")
+            line.map(|l| l.as_str().to_bytes().expect("must convert"))
+                .expect("must convert")
         })
         .enumerate()
         .flat_map(|(pos, test)| (0u8..=255).map(move |key| (pos, key, test.xor(&[key]))))

@@ -1,4 +1,6 @@
 #![allow(dead_code)]
+use anyhow::Result;
+
 mod set1;
 
 pub trait XOR {
@@ -20,5 +22,32 @@ impl XOR for [u8] {
                 *c ^= d;
             }
         }
+    }
+}
+
+pub trait ToHex {
+    fn to_hex(&self) -> String;
+}
+
+impl ToHex for &[u8] {
+    fn to_hex(&self) -> String {
+        self.iter().map(|b| format!("{:02x?}", b)).collect()
+    }
+}
+
+pub trait ToBytes {
+    fn to_bytes(&self) -> Result<Vec<u8>>;
+}
+
+impl ToBytes for &str {
+    fn to_bytes(&self) -> Result<Vec<u8>> {
+        let mut bytes = Vec::new();
+
+        for i in (0..self.len()).step_by(2) {
+            let byte = u8::from_str_radix(&self[i..=(i + 1)], 16)?;
+            bytes.push(byte);
+        }
+
+        Ok(bytes)
     }
 }
