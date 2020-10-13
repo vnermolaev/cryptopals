@@ -7,15 +7,6 @@ pub fn compute_probs(phrase: &[u8]) -> HashMap<u8, f32> {
             return freq;
         }
 
-        // let c = if c.is_ascii_alphanumeric() {
-        //     c.to_ascii_lowercase()
-        // } else if *c == b'\n' || *c == b'\t' || c.is_ascii_whitespace() || c.is_ascii_punctuation()
-        // {
-        //     b' '
-        // } else {
-        //     0
-        // };
-
         let c = if c.is_ascii_alphanumeric() {
             c.to_ascii_lowercase()
         } else if *c == b'\n' || *c == b'\t' || c.is_ascii_whitespace() {
@@ -68,7 +59,7 @@ pub fn break_single_xor(sample: &HashMap<u8, f32>, test: &[u8]) -> u8 {
         .unwrap()
 }
 
-pub const SAMPLE: &'static str =
+pub const SAMPLE: &str =
     "the quick brown fox jumps over the lazy dog. 1234567890.
     In mathematical statistics, the Kullback–Leibler divergence (also called relative entropy) is a measure
 of how one probability distribution is different from a second, reference probability distribution.
@@ -91,7 +82,7 @@ mod test {
     #[test]
     fn test_single_byte_xor_cipher() {
         let bytes = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-            .to_bytes()
+            .hex_to_bytes()
             .expect("must convert");
 
         let sample_dist = compute_probs((&SAMPLE).as_ref());

@@ -1,21 +1,11 @@
 use crate::set1::ch3::{break_single_xor, compute_probs, kullback_leibler, SAMPLE};
+use crate::set1::read_base64_file_content;
 use crate::XOR;
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 fn break_repeating_xor_base64_file(path: &str) -> Vec<u8> {
-    let file = File::open(path).expect("Must read");
-    let reader = BufReader::new(file);
+    let input = read_base64_file_content(path);
     let sample_dist = compute_probs((&SAMPLE).as_ref());
-
-    let content = reader
-        .lines()
-        .into_iter()
-        .map(|line| line.expect("Line must be defined"))
-        .collect::<String>();
-
-    let input = base64::decode(content).expect("Must decode");
 
     break_repeating_xor(&sample_dist, &input)
 }
@@ -34,7 +24,7 @@ fn break_repeating_xor(sample_dist: &HashMap<u8, f32>, input: &[u8]) -> Vec<u8> 
                 "{}\n{}\n{}\n\n",
                 kl,
                 String::from_utf8(key.clone()).unwrap(),
-                String::from_utf8(input.xor(key).clone()).unwrap()
+                String::from_utf8(input.xor(key)).unwrap()
             );
 
             kl
@@ -98,7 +88,7 @@ fn break_repeating_xor_with_keysize(
     input
         .chunks(key_size)
         .fold(Vec::new(), |mut transposed, col| {
-            if transposed.len() == 0 {
+            if transposed.is_empty() {
                 col.iter().for_each(|b| transposed.push(vec![*b]));
             } else {
                 col.iter()

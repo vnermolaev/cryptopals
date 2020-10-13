@@ -36,11 +36,11 @@ impl ToHex for &[u8] {
 }
 
 pub trait ToBytes {
-    fn to_bytes(&self) -> Result<Vec<u8>>;
+    fn hex_to_bytes(&self) -> Result<Vec<u8>>;
 }
 
 impl ToBytes for &str {
-    fn to_bytes(&self) -> Result<Vec<u8>> {
+    fn hex_to_bytes(&self) -> Result<Vec<u8>> {
         let mut bytes = Vec::new();
 
         for i in (0..self.len()).step_by(2) {

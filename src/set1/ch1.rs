@@ -2,7 +2,7 @@ use crate::ToBytes;
 use anyhow::Result;
 
 fn ch1_convert_hex_to_base64(hex: &str) -> Result<String> {
-    Ok(base64::encode(&hex.to_bytes()?))
+    Ok(base64::encode(&hex.hex_to_bytes()?))
 }
 
 #[cfg(test)]

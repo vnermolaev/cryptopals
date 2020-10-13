@@ -10,3 +10,4 @@ edition = "2018"
 [dependencies]
 base64 = "0.13.0"
 anyhow = "1.0.33"
+openssl = "0.10.30"

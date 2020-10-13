@@ -13,7 +13,7 @@ fn detect_single_character_xor(path: &str) -> (usize, u8, Vec<u8>) {
         .lines()
         .into_iter()
         .map(|line| {
-            line.map(|l| l.as_str().to_bytes().expect("must convert"))
+            line.map(|l| l.as_str().hex_to_bytes().expect("must convert"))
                 .expect("must convert")
         })
         .enumerate()
