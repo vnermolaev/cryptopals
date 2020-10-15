@@ -28,7 +28,7 @@ mod test {
 
     #[test]
     fn test_detect_single_character_xor() {
-        let crack = detect_single_character_xor("src/set1/ch4-sample.txt");
+        let crack = detect_single_character_xor("data/ch4.txt");
 
         assert_eq!(crack.2, b"Now that the party is jumping\n");
     }

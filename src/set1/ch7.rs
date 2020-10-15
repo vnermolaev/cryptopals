@@ -16,7 +16,7 @@ mod test {
     fn test_decrypt_aes_ecb() {
         let key = b"YELLOW SUBMARINE";
 
-        let decrypted = decrypt_aes_ecb("src/set1/ch7-sample.txt", key);
+        let decrypted = decrypt_aes_ecb("data/ch7.txt", key);
         let excerpt =
             b"I'm back and I'm ringin' the bell \nA rockin' on the mike while the fly girls yell";
 

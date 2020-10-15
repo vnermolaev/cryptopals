@@ -153,7 +153,7 @@ mod test {
 
     #[test]
     fn test_break_repeating_xor_base64_file() {
-        let crack = break_repeating_xor_base64_file("src/set1/ch6-sample.txt");
+        let crack = break_repeating_xor_base64_file("data/ch6.txt");
         assert_eq!(crack, b"Terminator X: Bring the noise");
     }
 }

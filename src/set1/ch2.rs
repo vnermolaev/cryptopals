@@ -1,7 +1,7 @@
 use crate::ToBytes;
 use anyhow::Result;
 
-fn ch2_fixed_xor(s1: &str, s2: &str) -> Result<String> {
+fn fixed_xor(s1: &str, s2: &str) -> Result<String> {
     let xored = s1
         .hex_to_bytes()?
         .iter()
@@ -14,7 +14,7 @@ fn ch2_fixed_xor(s1: &str, s2: &str) -> Result<String> {
 
 #[cfg(test)]
 mod test {
-    use crate::set1::ch2::ch2_fixed_xor;
+    use crate::set1::ch2::fixed_xor;
     use anyhow::Result;
 
     #[test]
@@ -23,7 +23,7 @@ mod test {
         let s2 = "686974207468652062756c6c277320657965".to_string();
         let result = "746865206b696420646f6e277420706c6179".to_string();
 
-        let attempt = ch2_fixed_xor(&s1, &s2)?;
+        let attempt = fixed_xor(&s1, &s2)?;
         assert_eq!(attempt, result);
 
         Ok(())

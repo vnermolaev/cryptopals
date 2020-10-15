@@ -65,8 +65,8 @@ mod test {
 
     #[test]
     fn test_detect_aes_ecb() {
-        let detected = detect_aes_ecb("src/set1/ch8-sample.txt", 16)
-            .expect("There must be an AES ECB encrypted line");
+        let detected =
+            detect_aes_ecb("data/ch8.txt", 16).expect("There must be an AES ECB encrypted line");
 
         println!("{:#?}", detected);
 
