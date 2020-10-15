@@ -2,6 +2,7 @@
 use anyhow::Result;
 
 mod set1;
+mod set2;
 
 pub trait XOR {
     fn xor(&self, _: &Self) -> Vec<u8>;
